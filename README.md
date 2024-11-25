@@ -85,7 +85,7 @@ The state that occurs after each action of the snake can be reduced to two quali
 
 #### 1.3. Get reward
 
-   Default rewards are as the followings:
+   Default rewards are as follows:
 
   | No collision | Target collision | Body collision | Wall collision |
   |--------------|------------------|----------------|----------------|
