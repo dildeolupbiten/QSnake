@@ -59,7 +59,7 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.1. Direction state
 
-`Direction state` is a one-dimensional array representing the types of collisions for each action type.
+The `direction state` is a one-dimensional array representing the types of collisions for each action type.
 
    | Directions | No collision | Target collision | Body Collision | Wall Collision |
    |------------|--------------|------------------|----------------|----------------|
@@ -71,7 +71,7 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.2. Distance state
 
-`Distance state` is the distance representation of the head of the snake and the target.
+The `distance state` is a representative point of the distance between the head of the snake and the target. If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
 
    | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
    |----|--------|--------|--------|
@@ -81,7 +81,7 @@ In this program, the state that occurs after each action of the snake is represe
 
 ##### 1.2.3. State key
 
-`State key` is created by hashing `6` integer values.
+The State key is created by hashing six `6` values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
@@ -89,7 +89,7 @@ In this program, the state that occurs after each action of the snake is represe
 
 #### 1.3. Get reward
 
-   Default rewards are as follows:
+   Rewards are determined arbitrarily and may be decreased or increased:
 
   | No collision | Target collision | Body collision | Wall collision |
   |--------------|------------------|----------------|----------------|
