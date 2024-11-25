@@ -59,7 +59,7 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.1. Direction state
 
-The `direction state` is a one-dimensional array representing the types of collisions for each action type.
+The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
    | Directions | No collision | Target collision | Body Collision | Wall Collision |
    |------------|--------------|------------------|----------------|----------------|
