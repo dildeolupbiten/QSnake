@@ -81,7 +81,7 @@ The `distance state` is a representative point of the distance between the head 
 
 ##### 1.2.3. State key
 
-The State key is created by hashing six `6` values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
+The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
