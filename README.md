@@ -39,7 +39,7 @@ The game utilizes the Q-Learning algorithm, a type of reinforcement learning. Th
 
 #### 1.1. Choose action
 
-   There are 4 basic moves in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter.    By default `epsilon` is equal to `.001` which means that `.001 %` of the actions will be selected randomly and `99.999 %` will be selected based on the action with highest `q value`.
+   There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.001` which means that `.1 %` of the actions will be selected randomly and `99.9 %` will be selected based on the action with highest `q value`.
 
 
    | Actions  | x  | y  |
