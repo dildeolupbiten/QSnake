@@ -43,7 +43,7 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.1. Choose action
 
-   There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.001` which means that `.1 %` of the actions will be selected randomly and `99.9 %` will be selected based on the action with highest `q value`.
+   There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.0001` which means that `.01 %` of the actions will be selected randomly and `99.99 %` will be selected based on the action with highest `q value`.
 
 
    | Actions  | x  | y  |

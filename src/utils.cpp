@@ -113,13 +113,15 @@ void train_snake(
     const double epsilon,
     const int episodes,
     const int play,
+    const double sleep,
     const std::array<int, 3>& rewards
 ) {
     double avg_size = 0;
+    int sleep_time = sleep ? (double)1000 / sleep : 0;
     std::cout << CLEAR;
     for (long episode = 0; episode < episodes; episode++) {
         snake -> reset();
-        if (episode >= episodes - 10) { std::cout << CLEAR; }
+        if (episode >= episodes - play) { std::cout << CLEAR; }
         while (!snake -> done) {
             choose_action(agent, snake, epsilon);
             size_t previous_key = snake -> key;
@@ -134,12 +136,12 @@ void train_snake(
                 learning_rate,
                 discount_factor
             );
-            if (play && episode >= episodes - 10) {
+            if (play && episode >= episodes - play) {
                 snake -> print_grid();
-                std::this_thread::sleep_for(std::chrono::microseconds(100000));
+                std::this_thread::sleep_for(std::chrono::microseconds(sleep_time));
             }
         }
-        if (play && episode >= episodes - 10) { continue; }
+        if (play && episode >= episodes - play) { continue; }
         avg_size += ((double)snake -> body.size() - avg_size) / (episode + 1);
         std::cout << "Episode: " << episode << " " << "Avg. Size: " <<
                      avg_size <<  " " << std::endl;

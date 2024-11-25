@@ -52,6 +52,7 @@ void train_snake(
     const double epsilon,
     const int episodes,
     const int play,
+    const double sleep,
     const std::array<int, 3>& rewards
 );
 
