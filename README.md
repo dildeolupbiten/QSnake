@@ -55,7 +55,7 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.2. State representation for each action
 
-The state that occurs after each action of the snake is represented with two qualities. Action-based states can be represented in different ways. The important thing here is whether the state variables we will use support the snake's ability to recognize its environment, avoid obstacles, and eat food.
+In this program, the state that occurs after each action of the snake is represented with two qualities. Though, action-based states can be represented also with more or less qualities. An optimal state representation should contain the information about the environment, the body itself, the consequences of the actions taken by the snake and shoulp support the snake's learning to eat foods without colliding its body or the walls.
    
 ##### 1.2.1. Direction state
 
