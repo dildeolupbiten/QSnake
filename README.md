@@ -95,7 +95,7 @@ The state that occurs after each action of the snake is represented with two qua
 
 Q values are updated according to the Bellmann equation.
 
-![formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/a3a4d2ac903b1be02cc81e60de2e9f91d7025fec)
+![formula](https://github.com/user-attachments/assets/e727e229-3334-410d-a0d0-1f55a0fa0597)
 
 #### 1.5. Save and load q values
 
