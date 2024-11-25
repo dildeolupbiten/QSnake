@@ -51,7 +51,7 @@ The game utilizes the Q-Learning algorithm, a type of reinforcement learning. Th
 
 #### 1.2. State representation for each action
 
-The state that occurs after each action of the snake can be reduced to two qualities.
+The state that occurs after each action of the snake is represented with two qualities. Action-based states can be represented in different ways. The important thing here is whether the state variables we will use support the snake's ability to recognize its environment, avoid obstacles, and eat food.
    
 ##### 1.2.1. Direction state
 
