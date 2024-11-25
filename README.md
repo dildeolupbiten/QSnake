@@ -67,7 +67,7 @@ The state that occurs after each action of the snake is represented with two qua
    
 ##### 1.2.2. Distance state
 
-`Distance state` is the distance representation of the head of snake and the target.
+`Distance state` is the distance representation of the head of the snake and the target.
 
    | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
    |----|--------|--------|--------|
