@@ -37,7 +37,7 @@ The game utilizes the Q-Learning algorithm, a type of reinforcement learning. Th
 
 ### 1. Train snake
 
-The agent (snake) interacts with the environment, exploring actions and learning over time. Below is an example of how the snake is moving after trained:
+The agent (snake) interacts with the environment, exploring actions and learning over time. Here is an example of how the snake acts after training:
 
 ![output](https://github.com/user-attachments/assets/deecca94-550b-4037-aa45-219c28fb7736)
 
