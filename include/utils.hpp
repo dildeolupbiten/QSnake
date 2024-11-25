@@ -10,7 +10,7 @@ int randrange(const int min, const int max);
 
 double uniform(const double min, const double max);
 
-int max(Agent *agent, Snake *snake, size_t key);
+int max_index(Agent *agent, Snake *snake, size_t key);
 
 void choose_action(Agent *agent, Snake *snake, const double epsilon);
 
