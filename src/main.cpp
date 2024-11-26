@@ -25,6 +25,6 @@ int main() {
         sleep,
         rewards
     );
-    agent -> save("agent.dat");
+    // agent -> save("agent.dat");
     return 0;
 }
