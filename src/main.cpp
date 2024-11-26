@@ -5,10 +5,10 @@ int main() {
     double learning_rate = .1;
     double discount_factor = .9;
     double epsilon = .0001;
-    int episodes = 100000;
+    int episodes = 1;
     int width = 10;
     int height = 10;
-    int play = 0; // will play the game 0 times.
+    int play = 1; // will play the game 0 times.
     double sleep = .01;
     std::array<int, 3> rewards = {100, -30, 0};
     Agent *agent = new Agent();
