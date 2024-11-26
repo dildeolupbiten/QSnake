@@ -8,7 +8,7 @@ int main() {
     int episodes = 100000;
     int width = 10;
     int height = 10;
-    int play = 2; // will play the game 2 times.
+    int play = 0; // will play the game 0 times.
     double sleep = .01;
     std::array<int, 3> rewards = {100, -30, 0};
     Agent *agent = new Agent();
