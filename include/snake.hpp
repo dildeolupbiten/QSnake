@@ -20,8 +20,8 @@ public:
     Position target;
     Position distance;
     void set_target();
-    void set_directions();
     void set_distance();
+    void set_directions();
     void reset();
     void print_grid();
     void increase_body();
