@@ -93,7 +93,7 @@ The State key is created by hashing `6` integer values: `4` related to the `dire
 
   | No collision | Target collision | Body collision | Wall collision |
   |--------------|------------------|----------------|----------------|
-  | 0            | 100              | -50            | -50            |
+  | 0            | 1                | -1             | -1             |
 
 #### 1.4. Update q value
 

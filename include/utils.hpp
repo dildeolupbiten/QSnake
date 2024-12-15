@@ -14,17 +14,11 @@ int max_index(Agent *agent, Snake *snake, size_t key);
 
 void choose_action(Agent *agent, Snake *snake, const double epsilon);
 
-int penalty_for_obstacle_collision(
-    Snake *snake,
-    const std::array<int, 3>& rewards
-);
+int penalty_for_obstacle_collision(Snake *snake);
 
-int bonus_for_target_collision(
-    Snake *snake,
-    const std::array<int, 3>& rewards
-);
+int bonus_for_target_collision(Snake *snake);
 
-int get_reward(Snake *snake, const std::array<int, 3>& rewards);
+int get_reward(Snake *snake);
 
 double q_algorithm(
     const double current_q,
@@ -52,8 +46,7 @@ void train_snake(
     const double epsilon,
     const int episodes,
     const int play,
-    const double sleep,
-    const std::array<int, 3>& rewards
+    const double sleep
 );
 
 #endif // UTILS_HPP

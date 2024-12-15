@@ -40,35 +40,29 @@ void choose_action(Agent *agent, Snake *snake, const double epsilon) {
     }
 }
 
-int penalty_for_obstacle_collision(
-    Snake *snake,
-    const std::array<int, 3>& rewards
-) {
+int penalty_for_obstacle_collision(Snake *snake) {
     if (snake -> directions[snake -> action] == -1) {
         snake -> done = 1;
-        return rewards[1];
+        return -1;
     }
-    return rewards[2];
+    return 0;
 }
 
-int reward_for_target_collision(
-    Snake *snake,
-    const std::array<int, 3>& rewards
-) {
+int reward_for_target_collision(Snake *snake) {
     snake -> increase_body();
     if (snake -> directions[snake -> action] == 1) {
         snake -> set_target();
-        return rewards[0];
+        return 1;
     }
     snake -> decrease_body();
-    return rewards[2];
+    return 0;
 }
 
-int get_reward(Snake *snake, const std::array<int, 3>& rewards) {
+int get_reward(Snake *snake) {
     int reward = 0;
-    reward += penalty_for_obstacle_collision(snake, rewards);
+    reward += penalty_for_obstacle_collision(snake);
     if (snake -> done) { return reward; }
-    reward += reward_for_target_collision(snake, rewards);
+    reward += reward_for_target_collision(snake);
     return reward;
 }
 
@@ -113,8 +107,7 @@ void train_snake(
     const double epsilon,
     const int episodes,
     const int play,
-    const double sleep,
-    const std::array<int, 3>& rewards
+    const double sleep
 ) {
     double avg_size = 0;
     int sleep_time = sleep ? (double)1000 / sleep : 0;
@@ -125,7 +118,7 @@ void train_snake(
         while (!snake -> done) {
             choose_action(agent, snake, epsilon);
             size_t previous_key = snake -> key;
-            int reward = get_reward(snake, rewards);
+            int reward = get_reward(snake);
             size_t current_key = agent -> get_key(snake);
             update_q_value(
                 agent,
@@ -138,7 +131,9 @@ void train_snake(
             );
             if (play && episode >= episodes - play) {
                 snake -> print_grid();
-                std::this_thread::sleep_for(std::chrono::microseconds(sleep_time));
+                std::this_thread::sleep_for(
+                    std::chrono::microseconds(sleep_time)
+                );
             }
         }
         if (play && episode >= episodes - play) { continue; }

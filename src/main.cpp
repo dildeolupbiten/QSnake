@@ -10,7 +10,6 @@ int main() {
     int height = 10;
     int play = 1; // will play the game 1 time.
     double sleep = .01;
-    std::array<int, 3> rewards = {100, -30, 0};
     Agent *agent = new Agent();
     agent -> load("agent.dat");
     Snake *snake = new Snake(width, height);
@@ -22,8 +21,7 @@ int main() {
         epsilon,
         episodes,
         play,
-        sleep,
-        rewards
+        sleep
     );
     agent -> save("agent.dat");
     return 0;
