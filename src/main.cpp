@@ -5,7 +5,7 @@ int main() {
     double learning_rate = .1;
     double discount_factor = .9;
     double epsilon = .0001;
-    int episodes = 1;
+    int episodes = 100000;
     int width = 10;
     int height = 10;
     int play = 1; // will play the game 1 time.
@@ -25,6 +25,6 @@ int main() {
         sleep,
         rewards
     );
-    // agent -> save("agent.dat");
+    agent -> save("agent.dat");
     return 0;
 }

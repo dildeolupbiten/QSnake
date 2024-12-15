@@ -30,11 +30,8 @@ void Snake::set_directions() {
         int y = body[0].y + ACTIONS[i].y;
         if (x == target.x && y == target.y) {
             directions[i] = 1;
-        } else if (0 > x || x >= height || 0 > y || y >= width) {
-            directions[i] = -1;
         } else if (
-            0 <= x && x < height &&
-            0 <= y && y < width &&
+            0 > x || x >= height || 0 > y || y >= width ||
             grid[width * x + y]
         ) {
             directions[i] = -1;
