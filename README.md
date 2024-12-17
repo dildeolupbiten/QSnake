@@ -71,11 +71,24 @@ The `direction state` is a one-dimensional array representing the types of colli
 
 The `distance state` is a representative point of the distance between the head of the snake and the target. If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
 
+The distance between the snake's head and the bait is normalized as follows:
+
+```
+void Snake::set_distance() {
+    int x = body[0].x - target.x;
+    int y = body[0].y - target.y;
+    if (x) { x = x > 0 ? 1 : -1; }
+    if (y) { y = y > 0 ? 1 : -1; }
+    distance = (Position){x, y};
+}
+```
+
+Normalization, in this case, is done to represent the direction of the snake towards the target. Instead of specifying the distance between the snake's head and the target in two axes (x and y), we only want to specify the directions (right, left, up, down). Normalization simplifies these directions and makes the directions of movement more understandable.
+
    | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
    |----|--------|--------|--------|
    | x  | -1     | 0      | 1      |
    | y  | -1     | 0      | 1      |
-
 
 ##### 1.2.3. State key
 
