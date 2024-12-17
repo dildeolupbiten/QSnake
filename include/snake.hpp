@@ -22,6 +22,8 @@ public:
     void set_target();
     void set_distance();
     void set_directions();
+    int flood_fill(int x, int y, int visited[]);
+    int is_safe_move(int x, int y);
     void reset();
     void print_grid();
     void increase_body();

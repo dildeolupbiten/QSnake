@@ -41,20 +41,27 @@ void choose_action(Agent *agent, Snake *snake, const double epsilon) {
 }
 
 int penalty_for_obstacle_collision(Snake *snake) {
-    if (snake -> directions[snake -> action] == -1) {
+    if (snake -> directions[snake -> action] == -2) {
         snake -> done = 1;
-        return -1;
+        return -2;
     }
     return 0;
 }
 
 int reward_for_target_collision(Snake *snake) {
     snake -> increase_body();
-    if (snake -> directions[snake -> action] == 1) {
+    if (snake -> directions[snake -> action] == 2) {
         snake -> set_target();
-        return 1;
+        return 2;
     }
     snake -> decrease_body();
+    return 0;
+}
+
+int penalty_for_dangerous_move(Snake *snake) {
+    if (snake -> directions[snake -> action] == -1) {
+        return -1;
+    }
     return 0;
 }
 
@@ -63,6 +70,7 @@ int get_reward(Snake *snake) {
     reward += penalty_for_obstacle_collision(snake);
     if (snake -> done) { return reward; }
     reward += reward_for_target_collision(snake);
+    reward += penalty_for_dangerous_move(snake);
     return reward;
 }
 
@@ -138,7 +146,7 @@ void train_snake(
         }
         if (play && episode >= episodes - play) { continue; }
         avg_size += ((double)snake -> body.size() - avg_size) / (episode + 1);
-        std::cout << "Episode: " << episode << " " << "Avg. Size: " <<
-                     avg_size <<  " " << std::endl;
+        std::cout << "Episode: " << episode << " Avg. Size: " <<
+            avg_size << std::endl;
     }
 }

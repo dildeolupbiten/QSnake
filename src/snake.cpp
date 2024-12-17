@@ -28,17 +28,39 @@ void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
         int x = body[0].x + ACTIONS[i].x;
         int y = body[0].y + ACTIONS[i].y;
-        if (x == target.x && y == target.y) {
-            directions[i] = 1;
-        } else if (
+        if (
             0 > x || x >= height || 0 > y || y >= width ||
             grid[width * x + y]
         ) {
+            directions[i] = -2;
+        } else if (!is_safe_move(x, y)) {
             directions[i] = -1;
+        } else if (x == target.x && y == target.y) {
+            directions[i] = 2;
         } else {
             directions[i] = 0;
         }
     }
+}
+
+int Snake::flood_fill(int x, int y, int visited[]) {
+    if (
+        x < 0 || x >= height || y < 0 || y >= width ||
+        grid[x * width + y] || visited[x * width + y]
+    )
+        return 0;
+    visited[x * width + y] = 1;
+    int size = 1;
+    size += flood_fill(x + 1, y, visited);
+    size += flood_fill(x - 1, y, visited);
+    size += flood_fill(x, y + 1, visited);
+    size += flood_fill(x, y - 1, visited);
+    return size;
+}
+
+int Snake::is_safe_move(int x, int y) {
+    int visited[height * width] = {0};
+    return flood_fill(x, y, visited) > body.size();
 }
 
 void Snake::reset() {

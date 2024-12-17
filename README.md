@@ -45,7 +45,6 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
    There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.0001` which means that `.01 %` of the actions will be selected randomly and `99.99 %` will be selected based on the action with highest `q value`.
 
-
    | Actions  | x  | y  |
    |----------|----|----|
    | UP       | -1 | 0  |
@@ -61,13 +60,12 @@ In this program, the state that occurs after each action of the snake is represe
 
 The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
-   | Directions | No collision | Target collision | Body Collision | Wall Collision |
-   |------------|--------------|------------------|----------------|----------------|
-   | UP         | 0            | 1                | -1             | -1             |
-   | RIGHT      | 0            | 1                | -1             | -1             |
-   | DOWN       | 0            | 1                | -1             | -1             |
-   | LEFT       | 0            | 1                | -1             | -1             |
-
+   | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
+   |------------|--------------|------------------|----------------|----------------|------------------|
+   | UP         | 0            | 2                | -2             | -2             | -1               |
+   | RIGHT      | 0            | 2                | -2             | -2             | -1               |           
+   | DOWN       | 0            | 2                | -2             | -2             | -1               |          
+   | LEFT       | 0            | 2                | -2             | -2             | -1               |
    
 ##### 1.2.2. Distance state
 
@@ -91,9 +89,9 @@ The State key is created by hashing `6` integer values: `4` related to the `dire
 
    Rewards are determined arbitrarily and may be decreased or increased:
 
-  | No collision | Target collision | Body collision | Wall collision |
-  |--------------|------------------|----------------|----------------|
-  | 0            | 1                | -1             | -1             |
+  | No collision | Target collision | Body collision | Wall collision | Dangerous Action |
+  |--------------|------------------|----------------|----------------|------------------|
+  | 0            | 2                | -2             | -2             | -1               |
 
 #### 1.4. Update q value
 
