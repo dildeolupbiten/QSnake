@@ -18,7 +18,7 @@ int penalty_for_obstacle_collision(Snake *snake);
 
 int bonus_for_target_collision(Snake *snake);
 
-int penalty_for_dangerous_move(Snake *snake);
+int penalty_for_dangerous_action(Snake *snake);
 
 int get_reward(Snake *snake);
 

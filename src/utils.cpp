@@ -58,7 +58,7 @@ int reward_for_target_collision(Snake *snake) {
     return 0;
 }
 
-int penalty_for_dangerous_move(Snake *snake) {
+int penalty_for_dangerous_action(Snake *snake) {
     if (snake -> directions[snake -> action] == -1) {
         return -1;
     }
@@ -70,7 +70,7 @@ int get_reward(Snake *snake) {
     reward += penalty_for_obstacle_collision(snake);
     if (snake -> done) { return reward; }
     reward += reward_for_target_collision(snake);
-    reward += penalty_for_dangerous_move(snake);
+    reward += penalty_for_dangerous_action(snake);
     return reward;
 }
 
