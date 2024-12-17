@@ -134,6 +134,24 @@ Normalization, in this case, is done to represent the direction of the snake tow
 ##### 1.2.3. State key
 
 The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
+```C++
+size_t Agent::get_key(Snake *snake) {
+    snake -> set_distance();
+    snake -> set_directions();
+    std::array<int, 6> state;
+    for (int i = 0; i < 4; i++) { state[i] = snake -> directions[i]; }
+    state[4] = snake -> distance.x;
+    state[5] = snake -> distance.y;
+    size_t key = 0;
+    for (int i = 0; i < 6; i++) {
+        key ^= std::hash<int>{}(
+            state[i]
+        ) + 0x9e3779b9 + (key << 6) + (key >> 2);
+    }
+    return key;
+}
+```
+
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
