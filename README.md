@@ -182,7 +182,7 @@ int reward_for_target_collision(Snake *snake) {
     return 0;
 }
 
-int penalty_for_dangerous_move(Snake *snake) {
+int penalty_for_dangerous_action(Snake *snake) {
     if (snake -> directions[snake -> action] == -1) {
         return -1;
     }
