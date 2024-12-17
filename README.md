@@ -54,6 +54,47 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.2. State representation for each action
 
+```
+void Snake::set_directions() {
+    for (int i = 0; i < 4; i++) {
+        int x = body[0].x + ACTIONS[i].x;
+        int y = body[0].y + ACTIONS[i].y;
+        if (
+            0 > x || x >= height || 0 > y || y >= width ||
+            grid[width * x + y]
+        ) {
+            directions[i] = -2;
+        } else if (!is_safe_move(x, y)) {
+            directions[i] = -1;
+        } else if (x == target.x && y == target.y) {
+            directions[i] = 2;
+        } else {
+            directions[i] = 0;
+        }
+    }
+}
+
+int Snake::flood_fill(int x, int y, int visited[]) {
+    if (
+        x < 0 || x >= height || y < 0 || y >= width ||
+        grid[x * width + y] || visited[x * width + y]
+    )
+        return 0;
+    visited[x * width + y] = 1;
+    int size = 1;
+    size += flood_fill(x + 1, y, visited);
+    size += flood_fill(x - 1, y, visited);
+    size += flood_fill(x, y + 1, visited);
+    size += flood_fill(x, y - 1, visited);
+    return size;
+}
+
+int Snake::is_safe_move(int x, int y) {
+    int visited[height * width] = {0};
+    return flood_fill(x, y, visited) > body.size();
+}
+```
+
 In this program, the state that occurs after each action of the snake is represented with two qualities. Though, action-based states can be represented also with more or less qualities. An optimal state representation should contain the information about the environment, the body itself, the consequences of the actions taken by the snake and shoulp support the snake's learning to eat foods without colliding its body or the walls.
    
 ##### 1.2.1. Direction state
