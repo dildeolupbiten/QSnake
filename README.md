@@ -54,7 +54,7 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.2. State representation for each action
 
-```
+```C++
 void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
         int x = body[0].x + ACTIONS[i].x;
@@ -114,7 +114,7 @@ The `distance state` is a representative point of the distance between the head 
 
 The distance between the snake's head and the bait is normalized as follows:
 
-```
+```C++
 void Snake::set_distance() {
     int x = body[0].x - target.x;
     int y = body[0].y - target.y;
@@ -134,6 +134,7 @@ Normalization, in this case, is done to represent the direction of the snake tow
 ##### 1.2.3. State key
 
 The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
+
 ```C++
 size_t Agent::get_key(Snake *snake) {
     snake -> set_distance();
