@@ -70,7 +70,7 @@ void Snake::set_directions() {
             grid[width * x + y]
         ) {
             directions[i] = -2;
-        } else if (!is_safe_move(x, y)) {
+        } else if (!is_safe_action(x, y)) {
             directions[i] = -1;
         } else if (x == target.x && y == target.y) {
             directions[i] = 2;
@@ -95,7 +95,7 @@ int Snake::flood_fill(int x, int y, int visited[]) {
     return size;
 }
 
-int Snake::is_safe_move(int x, int y) {
+int Snake::is_safe_action(int x, int y) {
     int visited[height * width] = {0};
     return flood_fill(x, y, visited) > body.size();
 }
