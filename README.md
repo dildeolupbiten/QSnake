@@ -54,6 +54,10 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.2. State representation for each action
 
+In this program, the state that occurs after each action of the snake is represented with two qualities. Though, action-based states can be represented also with more or less qualities. An optimal state representation should contain the information about the environment, the body itself, the consequences of the actions taken by the snake and shoulp support the snake's learning to eat foods without colliding its body or the walls.
+   
+##### 1.2.1. Direction state
+
 ```C++
 void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
@@ -94,10 +98,6 @@ int Snake::is_safe_move(int x, int y) {
     return flood_fill(x, y, visited) > body.size();
 }
 ```
-
-In this program, the state that occurs after each action of the snake is represented with two qualities. Though, action-based states can be represented also with more or less qualities. An optimal state representation should contain the information about the environment, the body itself, the consequences of the actions taken by the snake and shoulp support the snake's learning to eat foods without colliding its body or the walls.
-   
-##### 1.2.1. Direction state
 
 The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
