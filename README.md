@@ -43,7 +43,7 @@ The agent (snake) interacts with the environment, exploring actions and learning
 
 #### 1.1. Choose action
 
-   There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.0001` which means that `.01 %` of the actions will be selected randomly and `99.99 %` will be selected based on the action with highest `q value`.
+There are 4 basic actions in the snake game. The snake does a random action during the exploration phase. Exploration rate is set with the `epsilon` parameter. By default `epsilon` is equal to `.0001` which means that `.01 %` of the actions will be selected randomly and `99.99 %` will be selected based on the action with highest `q value`.
 
    | Actions  | x  | y  |
    |----------|----|----|
@@ -58,7 +58,50 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.1. Direction state
 
-The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
+The `direction state` is a one-dimensional array representing the types of collisions for each action type.
+
+```C++
+void Snake::set_directions() {
+    for (int i = 0; i < 4; i++) {
+        int x = body[0].x + ACTIONS[i].x;
+        int y = body[0].y + ACTIONS[i].y;
+        if (
+            0 > x || x >= height || 0 > y || y >= width ||
+            grid[width * x + y]
+        ) {
+            directions[i] = -2;
+        } else if (!is_safe_move(x, y)) {
+            directions[i] = -1;
+        } else if (x == target.x && y == target.y) {
+            directions[i] = 2;
+        } else {
+            directions[i] = 0;
+        }
+    }
+}
+
+int Snake::flood_fill(int x, int y, int visited[]) {
+    if (
+        x < 0 || x >= height || y < 0 || y >= width ||
+        grid[x * width + y] || visited[x * width + y]
+    )
+        return 0;
+    visited[x * width + y] = 1;
+    int size = 1;
+    size += flood_fill(x + 1, y, visited);
+    size += flood_fill(x - 1, y, visited);
+    size += flood_fill(x, y + 1, visited);
+    size += flood_fill(x, y - 1, visited);
+    return size;
+}
+
+int Snake::is_safe_move(int x, int y) {
+    int visited[height * width] = {0};
+    return flood_fill(x, y, visited) > body.size();
+}
+```
+
+The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
    | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
    |------------|--------------|------------------|----------------|----------------|------------------|
@@ -69,7 +112,18 @@ The `direction state` is a one-dimensional array representing the types of colli
    
 ##### 1.2.2. Distance state
 
-The `distance state` is a representative point of the distance between the head of the snake and the target. If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
+The `distance state` is the normalized distance between the head of the snake and the target. 
+
+```C++
+void Snake::set_distance() {
+    distance = (Position){
+        (body[0].x > target.x) - (body[0].x < target.x),
+        (body[0].y > target.y) - (body[0].y < target.y)
+    };
+}
+```
+
+If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
 
    | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
    |----|--------|--------|--------|
@@ -79,7 +133,27 @@ The `distance state` is a representative point of the distance between the head 
 
 ##### 1.2.3. State key
 
-The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
+The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. 
+
+```C++
+size_t Agent::get_key(Snake *snake) {
+    snake -> set_distance();
+    snake -> set_directions();
+    std::array<int, 6> state;
+    for (int i = 0; i < 4; i++) { state[i] = snake -> directions[i]; }
+    state[4] = snake -> distance.x;
+    state[5] = snake -> distance.y;
+    size_t key = 0;
+    for (int i = 0; i < 6; i++) {
+        key ^= std::hash<int>{}(
+            state[i]
+        ) + 0x9e3779b9 + (key << 6) + (key >> 2);
+    }
+    return key;
+}
+```
+
+Below you see a state representation of an `action`.
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
@@ -87,7 +161,7 @@ The State key is created by hashing `6` integer values: `4` related to the `dire
 
 #### 1.3. Get reward
 
-   Rewards are determined arbitrarily and may be decreased or increased:
+Rewards are determined arbitrarily and may be decreased or increased:
 
 ```C++
 int penalty_for_obstacle_collision(Snake *snake) {

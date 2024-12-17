@@ -17,11 +17,10 @@ void Snake::set_target() {
 }
 
 void Snake::set_distance() {
-    int x = body[0].x - target.x;
-    int y = body[0].y - target.y;
-    if (x) { x = x > 0 ? 1 : -1; }
-    if (y) { y = y > 0 ? 1 : -1; }
-    distance = (Position){x, y};
+    distance = (Position){
+        (body[0].x > target.x) - (body[0].x < target.x),
+        (body[0].y > target.y) - (body[0].y < target.y)
+    };
 }
 
 void Snake::set_directions() {
