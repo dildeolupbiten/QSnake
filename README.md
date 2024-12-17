@@ -58,6 +58,8 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.1. Direction state
 
+The direction state is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently.
+
 ```C++
 void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
@@ -99,7 +101,7 @@ int Snake::is_safe_move(int x, int y) {
 }
 ```
 
-The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
+The collision types or the results of the actions could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
    | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
    |------------|--------------|------------------|----------------|----------------|------------------|
