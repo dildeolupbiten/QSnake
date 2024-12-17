@@ -58,50 +58,7 @@ In this program, the state that occurs after each action of the snake is represe
    
 ##### 1.2.1. Direction state
 
-The direction state is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently.
-
-```C++
-void Snake::set_directions() {
-    for (int i = 0; i < 4; i++) {
-        int x = body[0].x + ACTIONS[i].x;
-        int y = body[0].y + ACTIONS[i].y;
-        if (
-            0 > x || x >= height || 0 > y || y >= width ||
-            grid[width * x + y]
-        ) {
-            directions[i] = -2;
-        } else if (!is_safe_move(x, y)) {
-            directions[i] = -1;
-        } else if (x == target.x && y == target.y) {
-            directions[i] = 2;
-        } else {
-            directions[i] = 0;
-        }
-    }
-}
-
-int Snake::flood_fill(int x, int y, int visited[]) {
-    if (
-        x < 0 || x >= height || y < 0 || y >= width ||
-        grid[x * width + y] || visited[x * width + y]
-    )
-        return 0;
-    visited[x * width + y] = 1;
-    int size = 1;
-    size += flood_fill(x + 1, y, visited);
-    size += flood_fill(x - 1, y, visited);
-    size += flood_fill(x, y + 1, visited);
-    size += flood_fill(x, y - 1, visited);
-    return size;
-}
-
-int Snake::is_safe_move(int x, int y) {
-    int visited[height * width] = {0};
-    return flood_fill(x, y, visited) > body.size();
-}
-```
-
-The collision types or the results of the actions could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
+The `direction state` is a one-dimensional array representing the types of collisions for each action type. The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
 
    | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
    |------------|--------------|------------------|----------------|----------------|------------------|
@@ -114,47 +71,15 @@ The collision types or the results of the actions could be encoded differently. 
 
 The `distance state` is a representative point of the distance between the head of the snake and the target. If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
 
-The distance between the snake's head and the bait is normalized as follows:
-
-```C++
-void Snake::set_distance() {
-    int x = body[0].x - target.x;
-    int y = body[0].y - target.y;
-    if (x) { x = x > 0 ? 1 : -1; }
-    if (y) { y = y > 0 ? 1 : -1; }
-    distance = (Position){x, y};
-}
-```
-
-Normalization, in this case, is done to represent the direction of the snake towards the target. Instead of specifying the distance between the snake's head and the target in two axes (x and y), we only want to specify the directions (right, left, up, down). Normalization simplifies these directions and makes the directions of movement more understandable.
-
    | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
    |----|--------|--------|--------|
    | x  | -1     | 0      | 1      |
    | y  | -1     | 0      | 1      |
 
+
 ##### 1.2.3. State key
 
 The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. Below you see a state representation of an `action`.
-
-```C++
-size_t Agent::get_key(Snake *snake) {
-    snake -> set_distance();
-    snake -> set_directions();
-    std::array<int, 6> state;
-    for (int i = 0; i < 4; i++) { state[i] = snake -> directions[i]; }
-    state[4] = snake -> distance.x;
-    state[5] = snake -> distance.y;
-    size_t key = 0;
-    for (int i = 0; i < 6; i++) {
-        key ^= std::hash<int>{}(
-            state[i]
-        ) + 0x9e3779b9 + (key << 6) + (key >> 2);
-    }
-    return key;
-}
-```
-
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
@@ -163,6 +88,33 @@ size_t Agent::get_key(Snake *snake) {
 #### 1.3. Get reward
 
    Rewards are determined arbitrarily and may be decreased or increased:
+
+```C++
+int penalty_for_obstacle_collision(Snake *snake) {
+    if (snake -> directions[snake -> action] == -2) {
+        snake -> done = 1;
+        return -2;
+    }
+    return 0;
+}
+
+int reward_for_target_collision(Snake *snake) {
+    snake -> increase_body();
+    if (snake -> directions[snake -> action] == 2) {
+        snake -> set_target();
+        return 2;
+    }
+    snake -> decrease_body();
+    return 0;
+}
+
+int penalty_for_dangerous_move(Snake *snake) {
+    if (snake -> directions[snake -> action] == -1) {
+        return -1;
+    }
+    return 0;
+}
+```
 
   | No collision | Target collision | Body collision | Wall collision | Dangerous Action |
   |--------------|------------------|----------------|----------------|------------------|
