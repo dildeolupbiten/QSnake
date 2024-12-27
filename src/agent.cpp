@@ -12,9 +12,8 @@ size_t Agent::get_key(Snake *snake) {
     state[5] = snake -> distance.y;
     size_t key = 0;
     for (int i = 0; i < 6; i++) {
-        key ^= std::hash<int>{}(
-            state[i]
-        ) + 0x9e3779b9 + (key << 6) + (key >> 2);
+        key ^= std::hash<int>{}(state[i]) +
+            0x9e3779b9 + (key << 6) + (key >> 2);
     }
     return key;
 }

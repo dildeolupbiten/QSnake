@@ -27,39 +27,44 @@ void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
         int x = body[0].x + ACTIONS[i].x;
         int y = body[0].y + ACTIONS[i].y;
-        if (
-            0 > x || x >= height || 0 > y || y >= width ||
-            grid[width * x + y]
-        ) {
-            directions[i] = -2;
-        } else if (!is_safe_action(x, y)) {
-            directions[i] = -1;
-        } else if (x == target.x && y == target.y) {
-            directions[i] = 2;
-        } else {
-            directions[i] = 0;
-        }
+        if (is_collision(x, y)) { directions[i] = -2; }
+        else if (!is_safe_action(x, y)) { directions[i] = -1; }
+        else if (x == target.x && y == target.y) { directions[i] = 2; }
+        else { directions[i] = 0; }
     }
 }
 
-int Snake::flood_fill(int x, int y, int visited[]) {
-    if (
-        x < 0 || x >= height || y < 0 || y >= width ||
-        grid[x * width + y] || visited[x * width + y]
-    )
-        return 0;
+int Snake::flood_fill(const int x, const int y, const int i, int visited[]) {
+    if (is_collision(x, y) || visited[x * width + y]) { return 0; }
     visited[x * width + y] = 1;
     int size = 1;
-    size += flood_fill(x + 1, y, visited);
-    size += flood_fill(x - 1, y, visited);
-    size += flood_fill(x, y + 1, visited);
-    size += flood_fill(x, y - 1, visited);
+    for (auto& action : ACTIONS) {
+        bool has_tail = false;
+        Position tail;
+        if (i > 1) {
+            has_tail = true;
+            tail = body[i];
+            grid[tail.x * width + tail.y] = 0;
+        }
+        size += flood_fill(x + action.x, y + action.y, i - 1, visited);
+        if (has_tail) { grid[tail.x * width + tail.y] = 1; }
+    }
     return size;
 }
 
-int Snake::is_safe_action(int x, int y) {
+int Snake::is_safe_action(const int x, const int y) {
     int visited[height * width] = {0};
-    return flood_fill(x, y, visited) > body.size();
+    int size = body.size();
+    return flood_fill(x, y, size - 1, visited) > size;
+}
+
+int Snake::is_out_of_bounds(const int x, const int y) {
+    return 0 > x || x >= height || 0 > y || y >= width;
+}
+
+int Snake::is_collision(const int x, const int y) {
+    if (is_out_of_bounds(x, y)) { return 1; }
+    return grid[width * x + y] == 1;
 }
 
 void Snake::reset() {
@@ -101,9 +106,7 @@ void Snake::increase_body() {
 }
 
 void Snake::decrease_body() {
-    int size = (int)body.size();
-    int x = body[size - 1].x;
-    int y = body[size - 1].y;
-    grid[width * x + y] = 0;
+    Position tail = body.back();
+    grid[tail.x * width + tail.y] = 0;
     body.pop_back();
 }

@@ -33,7 +33,6 @@ double q_algorithm(
 void update_q_value(
     Agent *agent,
     Snake *snake,
-    const size_t current_key,
     const size_t next_key,
     const int reward,
     const double learning_rate,

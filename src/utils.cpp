@@ -59,9 +59,7 @@ int reward_for_target_collision(Snake *snake) {
 }
 
 int penalty_for_dangerous_action(Snake *snake) {
-    if (snake -> directions[snake -> action] == -1) {
-        return -1;
-    }
+    if (snake -> directions[snake -> action] == -1) { return -1; }
     return 0;
 }
 
@@ -88,13 +86,12 @@ double q_algorithm(
 void update_q_value(
     Agent *agent,
     Snake *snake,
-    const size_t current_key,
     const size_t next_key,
     const int reward,
     const double learning_rate,
     const double discount_factor
 ) {
-    double current_q = agent -> table[current_key][snake -> action];
+    double current_q = agent -> table[snake -> key][snake -> action];
     int max_next_q_index = max_index(agent, snake, next_key);
     double max_next_q = agent -> table[next_key][max_next_q_index];
     double new_q = q_algorithm(
@@ -104,7 +101,7 @@ void update_q_value(
         learning_rate,
         discount_factor
     );
-    agent -> table[current_key][snake -> action] = new_q;
+    agent -> table[snake -> key][snake -> action] = new_q;
 }
 
 void train_snake(
@@ -125,14 +122,13 @@ void train_snake(
         if (episode >= episodes - play) { std::cout << CLEAR; }
         while (!snake -> done) {
             choose_action(agent, snake, epsilon);
-            size_t previous_key = snake -> key;
             int reward = get_reward(snake);
-            size_t current_key = agent -> get_key(snake);
+            size_t next_key = agent -> get_key(snake);
+            agent -> init_key(next_key);
             update_q_value(
                 agent,
                 snake,
-                previous_key,
-                current_key,
+                next_key,
                 reward,
                 learning_rate,
                 discount_factor
