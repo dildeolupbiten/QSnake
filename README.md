@@ -80,24 +80,28 @@ void Snake::set_directions() {
     }
 }
 
-int Snake::flood_fill(int x, int y, int visited[]) {
-    if (
-        x < 0 || x >= height || y < 0 || y >= width ||
-        grid[x * width + y] || visited[x * width + y]
-    )
-        return 0;
+int Snake::flood_fill(const int x, const int y, const int i, int visited[]) {
+    if (is_collision(x, y) || visited[x * width + y]) { return 0; }
     visited[x * width + y] = 1;
     int size = 1;
-    size += flood_fill(x + 1, y, visited);
-    size += flood_fill(x - 1, y, visited);
-    size += flood_fill(x, y + 1, visited);
-    size += flood_fill(x, y - 1, visited);
+    for (auto& action : ACTIONS) {
+        bool has_tail = false;
+        Position tail;
+        if (i > 1) {
+            has_tail = true;
+            tail = body[i];
+            grid[tail.x * width + tail.y] = 0;
+        }
+        size += flood_fill(x + action.x, y + action.y, i - 1, visited);
+        if (has_tail) { grid[tail.x * width + tail.y] = 1; }
+    }
     return size;
 }
 
-int Snake::is_safe_action(int x, int y) {
+int Snake::is_safe_action(const int x, const int y) {
     int visited[height * width] = {0};
-    return flood_fill(x, y, visited) > body.size();
+    int size = body.size();
+    return flood_fill(x, y, size - 1, visited) > size;
 }
 ```
 
@@ -183,9 +187,7 @@ int reward_for_target_collision(Snake *snake) {
 }
 
 int penalty_for_dangerous_action(Snake *snake) {
-    if (snake -> directions[snake -> action] == -1) {
-        return -1;
-    }
+    if (snake -> directions[snake -> action] == -1) { return -1; }
     return 0;
 }
 ```
