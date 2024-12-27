@@ -1,7 +1,6 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "snake.hpp"
 #include "agent.hpp"
 
 void init_random();
