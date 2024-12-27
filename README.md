@@ -65,18 +65,10 @@ void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
         int x = body[0].x + ACTIONS[i].x;
         int y = body[0].y + ACTIONS[i].y;
-        if (
-            0 > x || x >= height || 0 > y || y >= width ||
-            grid[width * x + y]
-        ) {
-            directions[i] = -2;
-        } else if (!is_safe_action(x, y)) {
-            directions[i] = -1;
-        } else if (x == target.x && y == target.y) {
-            directions[i] = 2;
-        } else {
-            directions[i] = 0;
-        }
+        if (is_collision(x, y)) { directions[i] = -2; }
+        else if (!is_safe_action(x, y)) { directions[i] = -1; }
+        else if (x == target.x && y == target.y) { directions[i] = 2; }
+        else { directions[i] = 0; }
     }
 }
 
