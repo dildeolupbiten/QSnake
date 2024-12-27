@@ -118,6 +118,15 @@ In this program, the state that occurs after each action of the snake is represe
 
 The `direction state` is a one-dimensional array representing the types of collisions for each action type.
 
+The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
+
+   | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
+   |------------|--------------|------------------|----------------|----------------|------------------|
+   | UP         | 0            | 2                | -2             | -2             | -1               |
+   | RIGHT      | 0            | 2                | -2             | -2             | -1               |           
+   | DOWN       | 0            | 2                | -2             | -2             | -1               |          
+   | LEFT       | 0            | 2                | -2             | -2             | -1               |
+   
 ```C++
 void Snake::set_directions() {
     for (int i = 0; i < 4; i++) {
@@ -155,18 +164,16 @@ int Snake::is_safe_action(const int x, const int y) {
 }
 ```
 
-The collision types could be encoded differently. The important thing here is to distinguish between collision types and assign a number to each collision type in terms of the consequences of the actions.
-
-   | Directions | No collision | Target collision | Body Collision | Wall Collision | Dangerous Action |
-   |------------|--------------|------------------|----------------|----------------|------------------|
-   | UP         | 0            | 2                | -2             | -2             | -1               |
-   | RIGHT      | 0            | 2                | -2             | -2             | -1               |           
-   | DOWN       | 0            | 2                | -2             | -2             | -1               |          
-   | LEFT       | 0            | 2                | -2             | -2             | -1               |
-   
 ##### 1.2.2. Distance state
 
-The `distance state` is the normalized distance between the head of the snake and the target. 
+The `distance state` is the normalized distance between the head of the snake and the target.
+
+If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
+
+   | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
+   |----|--------|--------|--------|
+   | x  | -1     | 0      | 1      |
+   | y  | -1     | 0      | 1      |
 
 ```C++
 void Snake::set_distance() {
@@ -177,17 +184,15 @@ void Snake::set_distance() {
 }
 ```
 
-If the distance is positive, it is represented with `1`, if negative, with `-1`, if there's no difference, it's represented with `0`.
-
-   | Δd | Δd < 0 | Δd = 0 | Δd > 0 | 
-   |----|--------|--------|--------|
-   | x  | -1     | 0      | 1      |
-   | y  | -1     | 0      | 1      |
-
-
 ##### 1.2.3. State key
 
-The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`. 
+The State key is created by hashing `6` integer values: `4` related to the `direction state` and `2` related to the `distance state`.
+
+Below you see a state representation of an `action`.
+
+  | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
+  |---------------------|----|-------|------|------|-----|-----|
+  | 3005401531224964638 | 0  | 1     | -1   | 0    | 1   | -1  |
 
 ```C++
 size_t Agent::get_key(Snake *snake) {
@@ -207,15 +212,13 @@ size_t Agent::get_key(Snake *snake) {
 }
 ```
 
-Below you see a state representation of an `action`.
-
-  | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
-  |---------------------|----|-------|------|------|-----|-----|
-  | 3005401531224964638 | 0  | 1     | -1   | 0    | 1   | -1  |
-
 #### 1.3. Get reward
 
 Rewards are determined arbitrarily and may be decreased or increased:
+
+  | No collision | Target collision | Body collision | Wall collision | Dangerous Action |
+  |--------------|------------------|----------------|----------------|------------------|
+  | 0            | 2                | -2             | -2             | -1               |
 
 ```C++
 int penalty_for_obstacle_collision(Snake *snake) {
@@ -249,12 +252,7 @@ int get_reward(Snake *snake) {
     reward += penalty_for_dangerous_action(snake);
     return reward;
 }
-
 ```
-
-  | No collision | Target collision | Body collision | Wall collision | Dangerous Action |
-  |--------------|------------------|----------------|----------------|------------------|
-  | 0            | 2                | -2             | -2             | -1               |
 
 #### 1.4. Update q value
 
