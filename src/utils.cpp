@@ -22,7 +22,7 @@ double uniform(const double min, const double max) {
     return dist(gen);
 }
 
-int max_index(Agent *agent, Snake *snake, size_t key) {
+int max_index(Agent *agent, size_t key) {
     std::array<double, 4> values = agent -> table[key];
     auto it = std::max_element(values.begin(), values.end());
     return std::distance(values.begin(), it);
@@ -36,7 +36,7 @@ void choose_action(Agent *agent, Snake *snake, const double epsilon) {
     } else {
         snake -> key = agent -> get_key(snake);
         agent -> init_key(snake -> key);
-        snake -> action = max_index(agent, snake, snake -> key);
+        snake -> action = max_index(agent, snake -> key);
     }
 }
 
@@ -92,7 +92,7 @@ void update_q_value(
     const double discount_factor
 ) {
     double current_q = agent -> table[snake -> key][snake -> action];
-    int max_next_q_index = max_index(agent, snake, next_key);
+    int max_next_q_index = max_index(agent, next_key);
     double max_next_q = agent -> table[next_key][max_next_q_index];
     double new_q = q_algorithm(
         current_q,
