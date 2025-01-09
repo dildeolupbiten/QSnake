@@ -193,7 +193,7 @@ Below you see a state representation of an `action`.
 
   | State Key           | UP | RIGHT | DOWN | LEFT | Δdx | Δdy |
   |---------------------|----|-------|------|------|-----|-----|
-  | 3005401531224964638 | 0  | 1     | -1   | 0    | 1   | -1  |
+  | 3005401531224964638 | 0  | 2     | -2   | 0    | 1   | -1  |
 
 ```C++
 size_t Agent::get_key(Snake *snake) {
